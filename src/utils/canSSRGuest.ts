@@ -1,8 +1,8 @@
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, GetStaticPathsResult } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import { parseCookies } from 'nookies';
 
 //função de liberar acesso de pages para visitantes.
-export function canSSPGuest<P>(fn: GetServerSideProps<P>) {
+export function canSSRGuest<P>(fn: GetServerSideProps<P>) {
     return async (ctx: GetServerSidePropsContext): Promise<GetServerSidePropsResult<P>> => {
         const cookies = parseCookies(ctx);
 
