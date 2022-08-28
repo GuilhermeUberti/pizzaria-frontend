@@ -4,6 +4,8 @@ import { Header } from "../../components/Header";
 import styles from './styles.module.scss';
 
 import { setupAPIClient } from "../../services/api";
+import { canSSRAuth } from "../../utils/canSSRAuth";
+
 import { toast } from "react-toastify";
 
 export default function Category() {
@@ -53,3 +55,9 @@ export default function Category() {
         </>
     )
 }
+
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+    return {
+        props: {}
+    }
+})
