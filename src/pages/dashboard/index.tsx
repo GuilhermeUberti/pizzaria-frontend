@@ -1,24 +1,76 @@
+import { useState } from "react";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import Head from "next/head";
+import styles from './styles.module.scss';
 
 import { Header } from "../../components/Header";
+import { FiRefreshCcw } from 'react-icons/fi';
 
-export default function DashBoard() {
+import { setupAPIClient } from "../../services/api";
+
+type OrderProps = {
+    id: string;
+    table: string | number;
+    status: boolean;
+    draft: boolean;
+    name: string | null;
+}
+
+interface HomeProps {
+    orders: OrderProps[];
+}
+
+export default function DashBoard({ orders }: HomeProps) {
+
+    const [orderList, setOrderList] = useState(orders || []);
+
+    function handleModalViewSelected(id: string){
+        alert("id Clicado: " + id);
+    }
+
     return (
         <>
             <Head>
                 <title>Painel - Pizzaria</title>
             </Head>
             <Header />
-            <div>
-                <h1>Painel</h1>
-            </div>
+            <main className={styles.container}>
+
+                <div className={styles.containerHeader}>
+                    <h1>Últimos Pedidos</h1>
+                    <button>
+                        <FiRefreshCcw size={25} color="#3fffa3" />
+                    </button>
+                </div>
+
+                <article className={styles.listOrders}>
+
+                    {orderList.map(item => (
+                        <section key={item.id} className={styles.orderItem}>
+                            <button onClick={() => handleModalViewSelected(item.id)}>
+                                <div className={styles.tag}></div>
+                                <span>Mesa {item.table}</span>
+                            </button>
+                        </section>
+                    ))}
+
+
+                </article>
+
+            </main>
         </>
     )
 }
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
+    const apiClient = setupAPIClient(ctx);
+
+    const response = await apiClient.get('/orders');
+    //console.log(response.data);
+
     return {
-        props: {}
+        props: {
+            orders: response.data
+        }
     }
 })
