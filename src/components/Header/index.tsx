@@ -22,6 +22,10 @@ export function Header() {
                 </Link>
 
                 <nav className={styles.menuNav}>
+                    <Link href={'/dashboard'}>
+                        <a>Pedidos</a>
+                    </Link>
+
                     <Link href={'/category'}>
                         <a>Categoria</a>
                     </Link>
